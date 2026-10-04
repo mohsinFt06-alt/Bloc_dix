@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bloc Dix - Communauté & Règles RP</title>
-    <!-- Tailwind CSS pour un design ultra clean et mobile friendly -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
@@ -33,21 +32,17 @@
             </div>
         </section>
 
-        <!-- Section Panneau Admin (Caché par défaut, s'affiche via le code secret) -->
+        <!-- Section Panneau Admin -->
         <section class="bg-slate-800/50 p-5 rounded-2xl border border-slate-700 mt-6">
             
-            <!-- Formulaire pour entrer le code secret Admin -->
             <div id="secret-login-box" class="space-y-3">
-                <h3 class="text-sm font-semibold text-slate-400 flex items-center gap-2">
-                    <span>🔐 Espace Réservé (Admin)</span>
-                </h3>
+                <h3 class="text-sm font-semibold text-slate-400">🔐 Espace Réservé (Admin)</h3>
                 <div class="flex gap-2">
-                    <input type="password" id="secret-code-input" placeholder="Entrer le code secret..." class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:border-red-500">
+                    <input type="text" id="secret-code-input" placeholder="Entrer le code secret..." class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:border-red-500">
                     <button onclick="checkSecretCode()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-3 rounded-xl transition text-sm">Entrer</button>
                 </div>
             </div>
 
-            <!-- Tableau de Bord Admin (S'affiche après le bon code) -->
             <div id="admin-dashboard" class="hidden space-y-4">
                 <div class="flex justify-between items-center">
                     <h2 class="text-xl font-bold text-emerald-400">🛠️ Panel Admin Activé</h2>
@@ -64,13 +59,12 @@
         &copy; 2026 Bloc Dix. Tous droits réservés.
     </footer>
 
-    <!-- Logique JavaScript Simple -->
     <script>
-        // الكود السري ديالك (يمكن ليك تبدل "admin123" بأي كلمة بغيتي)
-        const ADMIN_SECRET = "admin123";
+        // الكود السري الجديد هو: 1234
+        const ADMIN_SECRET = "1234";
 
         function checkSecretCode() {
-            const inputVal = document.getElementById('secret-code-input').value;
+            const inputVal = document.getElementById('secret-code-input').value.trim();
             if (inputVal === ADMIN_SECRET) {
                 document.getElementById('secret-login-box').classList.add('hidden');
                 document.getElementById('admin-dashboard').classList.remove('hidden');
@@ -105,5 +99,4 @@
         }
     </script>
 </body>
-    </html>
-    
+</html>
