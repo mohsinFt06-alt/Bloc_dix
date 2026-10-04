@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloc Dix - SA-MP Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid #1f2937;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        .logo {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #3b82f6;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #3b82f6;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #9ca3af;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        .server-info {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            border-left: 4px solid #3b82f6;
+        }
+        .btn-discord {
+            display: inline-block;
+            background-color: #5865F2;
+            color: white;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+            box-shadow: 0 4px 10px rgba(88, 101, 242, 0.4);
+        }
+        .btn-discord:hover {
+            background-color: #4752c4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="logo.png" alt="Bloc Dix Logo" class="logo">
+        
+        <h1>BLOC DIX</h1>
+        <p>Bienvenue sur le serveur officiel SA-MP. Préparez-vous pour une expérience unique !</p>
+        
+        <div class="server-info">
+            IP: <strong>play.blocdix.com</strong>
+        </div>
+
+        <a href="https://discord.gg/yourdiscord" target="_blank" class="btn-discord">Rejoindre Discord</a>
+    </div>
+</body>
+</html>
