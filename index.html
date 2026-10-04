@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bloc Dix - Dashboard Admin & Communauté</title>
+    <title>Bloc Dix - Communauté & Règles RP</title>
     <!-- Tailwind CSS pour un design ultra clean et mobile friendly -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -16,7 +16,7 @@
     <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-50">
         <div class="max-w-4xl mx-auto flex justify-between items-center">
             <h1 class="text-xl font-bold tracking-wider text-red-500">BLOC DIX</h1>
-            <div id="auth-status" class="text-sm text-slate-400">Non connecté</div>
+            <span id="role-badge" class="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded-full border border-slate-700">Visiteur</span>
         </div>
     </header>
 
@@ -28,29 +28,33 @@
             <div id="posts-container" class="space-y-4">
                 <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
                     <h3 class="font-bold text-red-400">Bienvenue sur Bloc Dix</h3>
-                    <p class="text-slate-300 text-sm mt-1">Le site est maintenant sécurisé via Firebase. Restez connectés pour les prochaines mises à jour du serveur !</p>
+                    <p class="text-slate-300 text-sm mt-1">Le site officiel de notre communauté. Retrouvez ici toutes les infos et les mises à jour du serveur.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Section Panel Admin (Protégée) -->
-        <section id="admin-section" class="bg-slate-800/50 p-5 rounded-2xl border border-slate-700 mt-6">
-            <h2 class="text-xl font-bold mb-4 text-emerald-400">🔒 Espace Administration</h2>
+        <!-- Section Panneau Admin (Caché par défaut, s'affiche via le code secret) -->
+        <section class="bg-slate-800/50 p-5 rounded-2xl border border-slate-700 mt-6">
             
-            <!-- Formulaire de Connexion Admin -->
-            <div id="login-form" class="space-y-3">
-                <p class="text-xs text-slate-400">Réservé exclusivement aux administrateurs de Bloc Dix.</p>
-                <input type="email" id="admin-email" placeholder="Email Admin" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-red-500">
-                <input type="password" id="admin-password" placeholder="Mot de passe" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-red-500">
-                <button onclick="loginAdmin()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-3 rounded-xl transition">Connexion Admin</button>
+            <!-- Formulaire pour entrer le code secret Admin -->
+            <div id="secret-login-box" class="space-y-3">
+                <h3 class="text-sm font-semibold text-slate-400 flex items-center gap-2">
+                    <span>🔐 Espace Réservé (Admin)</span>
+                </h3>
+                <div class="flex gap-2">
+                    <input type="password" id="secret-code-input" placeholder="Entrer le code secret..." class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:border-red-500">
+                    <button onclick="checkSecretCode()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-3 rounded-xl transition text-sm">Entrer</button>
+                </div>
             </div>
 
-            <!-- Tableau de Bord (Caché par défaut, s'affiche après connexion) -->
+            <!-- Tableau de Bord Admin (S'affiche après le bon code) -->
             <div id="admin-dashboard" class="hidden space-y-4">
-                <p class="text-green-400 text-sm font-semibold">✅ Connecté en tant qu'Admin Principal</p>
-                <textarea id="new-update-text" placeholder="Écrire une mise à jour ou une règle RP..." class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-emerald-500 h-24"></textarea>
-                <button onclick="publishUpdate()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold p-3 rounded-xl transition">Publier sur le site</button>
-                <button onclick="logoutAdmin()" class="w-full bg-slate-700 hover:bg-slate-600 text-white text-sm p-2 rounded-xl transition">Se déconnecter</button>
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-emerald-400">🛠️ Panel Admin Activé</h2>
+                    <button onclick="lockAdmin()" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-1.5 rounded-lg transition">Verrouiller</button>
+                </div>
+                <textarea id="new-update-text" placeholder="Écrire une mise à jour ou une règle RP..." class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-emerald-500 h-24 text-sm"></textarea>
+                <button onclick="publishUpdate()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold p-3 rounded-xl transition text-sm">Publier sur le site</button>
             </div>
         </section>
     </main>
@@ -60,47 +64,34 @@
         &copy; 2026 Bloc Dix. Tous droits réservés.
     </footer>
 
-    <!-- Firebase SDK et Logique JavaScript -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase.app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase.auth.js";
+    <!-- Logique JavaScript Simple -->
+    <script>
+        // الكود السري ديالك (يمكن ليك تبدل "admin123" بأي كلمة بغيتي)
+        const ADMIN_SECRET = "admin123";
 
-        // Configuration Firebase (Récupérée depuis ton projet BlocDix)
-        const firebaseConfig = {
-            apiKey: "AIzaSyCXt8-03a4_YOEiNnRBCgI3L1EkjZtqHTg",
-            authDomain: "blocdix.firebaseapp.com",
-            projectId: "blocdix",
-            storageBucket: "blocdix.firebasestorage.app",
-            messagingSenderId: "390786035112",
-            appId: "1:390786035112:web:4b186c20ae62313fb1419d",
-            measurementId: "G-KB5V4VTN61"
-        };
+        function checkSecretCode() {
+            const inputVal = document.getElementById('secret-code-input').value;
+            if (inputVal === ADMIN_SECRET) {
+                document.getElementById('secret-login-box').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                document.getElementById('role-badge').textContent = "Admin";
+                document.getElementById('role-badge').className = "text-xs bg-emerald-950 text-emerald-400 px-2 py-1 rounded-full border border-emerald-800";
+                alert("Bienvenue Boss ! Panel débloqué.");
+            } else {
+                alert("Code secret incorrect !");
+            }
+        }
 
-        // Initialisation de Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        function lockAdmin() {
+            document.getElementById('secret-login-box').classList.remove('hidden');
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('secret-code-input').value = '';
+            document.getElementById('role-badge').textContent = "Visiteur";
+            document.getElementById('role-badge').className = "text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded-full border border-slate-700";
+            alert("Panel verrouillé avec succès.");
+        }
 
-        // Fonctions globales rattachées à window pour les boutons HTML
-        window.loginAdmin = function() {
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert("Connexion réussie ! Bienvenue Boss.");
-                })
-                .catch((error) => {
-                    alert("Erreur de connexion : " + error.message);
-                });
-        };
-
-        window.logoutAdmin = function() {
-            signOut(auth).then(() => {
-                alert("Déconnecté avec succès.");
-            });
-        };
-
-        window.publishUpdate = function() {
+        function publishUpdate() {
             const text = document.getElementById('new-update-text').value;
             if(!text) return alert("Écris quelque chose d'abord !");
             
@@ -111,26 +102,7 @@
             container.prepend(newPost);
             document.getElementById('new-update-text').value = '';
             alert("Publié avec succès !");
-        };
-
-        // Surveillance de l'état de l'authentification en temps réel
-        onAuthStateChanged(auth, (user) => {
-            const loginForm = document.getElementById('login-form');
-            const adminDashboard = document.getElementById('admin-dashboard');
-            const authStatus = document.getElementById('auth-status');
-
-            if (user) {
-                loginForm.classList.add('hidden');
-                adminDashboard.classList.remove('hidden');
-                authStatus.textContent = "Connecté (Admin)";
-                authStatus.className = "text-sm text-emerald-400 font-semibold";
-            } else {
-                loginForm.classList.remove('hidden');
-                adminDashboard.classList.add('hidden');
-                authStatus.textContent = "Non connecté";
-                authStatus.className = "text-sm text-slate-400";
-            }
-        });
+        }
     </script>
 </body>
 </html>
